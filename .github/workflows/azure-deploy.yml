@@ -6,7 +6,7 @@ on:
       - develop
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,12 +18,18 @@ jobs:
         with:
           python-version: '3.13'
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
+      - name: Create virtual environment and install dependencies
+        run: |
+          python -m venv antenv
+          source antenv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Zip artifact for deployment
+        run: zip -r release.zip . --exclude "*.git*"
 
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v2
         with:
           app-name: ${{ secrets.AZURE_APP_NAME }}
           publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
-          package: .
+          package: release.zip
