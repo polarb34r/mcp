@@ -21,7 +21,7 @@ async def list_tools() -> list[types.Tool]:
     return [
         types.Tool(
             name="roll_dice",
-            description="Roll a dice with a given number of sides.",
+            description="Roll a dice with a given number of sides in azure.",
             inputSchema={
                 "type": "object",
                 "properties": {
@@ -51,10 +51,10 @@ async def call_tool(name: str, arguments: dict) -> list[types.TextContent]:
         rolls = [random.randint(1, sides) for _ in range(times)]
         total = sum(rolls)
         if times == 1:
-            result = f"🎲 Rolled a d{sides}: **{rolls[0]}**"
+            result = f"🎲 Rolled a DICE {sides}: **{rolls[0]}**"
         else:
             result = (
-                f"🎲 Rolled {times}x d{sides}: {rolls}\n"
+                f"🎲 ROLLED {times}x d{sides}: {rolls}\n"
                 f"Total: {total} | Average: {total / times:.1f}"
             )
         return [types.TextContent(type="text", text=result)]
