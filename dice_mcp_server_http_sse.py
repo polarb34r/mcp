@@ -6,6 +6,8 @@ Run:     python dice_mcp_server_http.py
 
 import random
 import uvicorn
+import os
+
 from mcp.server import Server
 from mcp.server.sse import SseServerTransport
 from mcp import types
@@ -82,6 +84,7 @@ async def asgi_app(scope, receive, send):
 
 
 if __name__ == "__main__":
-    print("🎲 Dice MCP Server running at http://localhost:8000")
-    print("   SSE endpoint: http://localhost:8000/sse")
-    uvicorn.run(asgi_app, host="0.0.0.0", port=8000)
+    port = int(os.environ.get("PORT", 8000))
+    print(f"🎲 Dice MCP Server running at http://0.0.0.0:{port}")
+    print(f"   SSE endpoint: http://0.0.0.0:{port}/sse")
+    uvicorn.run(asgi_app, host="0.0.0.0", port=port)
